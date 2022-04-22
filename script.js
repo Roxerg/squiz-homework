@@ -1,13 +1,11 @@
 
     // JSON data
     let companies = [];
-    // JSON data after filtering 
-    let filteredCompanies = null;
 
     let _table = document.getElementById('data-table');
     let valueRows = [];
-    let labelRow = null;
 
+    // key: filter column, value: match string
     let filters = {};
 
     const countryFilterInput = document.getElementById('countryFilter');
@@ -25,6 +23,8 @@
     document.getElementById('sortBy').onchange = onSortByChange;
     sortOrderButton.onclick = onSortOrderToggle;
 
+    // Sorting functions
+
     function onSortOrderToggle () {
         sortAsc = !sortAsc;
         if (sortAsc) {
@@ -40,19 +40,6 @@
         updateTable();
     }
 
-    function updateTable() {
-        const sortedResult = sortResults(filterResults());
-        emptyTable();
-        addValueRows(sortedResult);
-    }
-
-    function emptyTable() {
-        if (valueRows) {
-            valueRows.forEach((e) => _table.removeChild(e));
-            valueRows = null;
-        }
-    }
-
     function sortResults (entries) {
         return entries.sort((c1,c2) => {
             const a = c1[sortField];
@@ -66,6 +53,8 @@
         })
     }
 
+    // Filter functions
+
     function filterResults() {
         return companies.filter((company) => {
             return Object.entries(filters).reduce((prev, [filterField,filterExp]) => {
@@ -76,11 +65,13 @@
 
     function generateFilterFunction(field) {
         return (event) => {
+            // matches from start of string and from after space
             filters[field] = event.target.value ? new RegExp(`(^|\\s)${event.target.value}`, 'i') : null;
             updateTable();
         }
     }
 
+    // HTML generation functions
 
     function generateLabels(entries) {
         const labelRow = document.createElement('tr');
@@ -112,11 +103,7 @@
     function addValueRows(entries) {
 
         if (entries.length === 0) {
-            const nothingFound = document.createElement('tr');
-            nothingFound.id = 'nothing-found';
-            nothingFound.textContent = 'Nothing found :(. Try changing the filters.';
-            _table.appendChild(nothingFound);
-            valueRows = [nothingFound];
+            addNoEntriesMessage();
             return;
         }
 
@@ -127,7 +114,28 @@
         });
     }
 
-    
+    function updateTable() {
+        const sortedResult = sortResults(filterResults());
+        emptyTable();
+        addValueRows(sortedResult);
+    }
+
+    function emptyTable() {
+        if (valueRows) {
+            valueRows.forEach((e) => _table.removeChild(e));
+            valueRows = null;
+        }
+    }
+
+    function addNoEntriesMessage() {
+        const nothingFound = document.createElement('tr');
+        nothingFound.id = 'nothing-found';
+        nothingFound.textContent = 'Nothing found :(. Try changing the filters.';
+        _table.appendChild(nothingFound);
+        valueRows = [nothingFound];
+    }
+
+    // API calls
 
     function fetchData() { 
         fetch('https://dujour.squiz.cloud/developer-challenge/data')
@@ -138,9 +146,11 @@
             addLabelRow(companies);
             addValueRows(companies);
         }).catch((err) => {
-            alert('Failed to fetch table data:', err);
+            alert('Failed to fetch table data: ', err);
         })
     }
+
+    // Page initialization
 
     fetchData();
 
