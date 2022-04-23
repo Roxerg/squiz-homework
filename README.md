@@ -3,8 +3,20 @@ little html table for a job application.
 
 ---
 
-Entrypoint: `index.html` 
+## Running
+Entrypoint: `dist/index.html` 
+For convenience, 
 
-`style.min.css` - compiled and minified version of `style.scss`
+---
 
-`script.min.js` - minified version of `script.js`
+## Building
+
+First, install required packages with 
+```
+npm install
+```
+
+Then build with
+```
+npm run build
+```
