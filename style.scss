@@ -4,6 +4,8 @@ $smallWidth: 900px;
 
 $brigthTextColor: #FFFFFF;
 $headerColor: #607d8b;
+$borderColor: rgba(168, 168, 168, 0.5);
+$shadowColor: rgba(168, 168, 168, 1);
 
 
 html {
@@ -20,7 +22,7 @@ button, select, input {
     padding-right: 10px;
 }
 button {
-    width: 50px;
+    width: 4em;
 }
 select, input {
     line-height: 20px;
@@ -37,7 +39,6 @@ select, input {
 }
 
 #data-table {
-    overflow: scroll;
     border-collapse: collapse;
     th {
         height: 40px;
@@ -54,7 +55,7 @@ select, input {
     tr {
         border-bottom-style: solid;
         border-width:  2px;
-        border-color: lightgrey;
+        border-color: $borderColor;
     };
     td {
         padding-top: 5px;
@@ -75,16 +76,15 @@ select, input {
 
 .menu-contents {
     width: 100%;
-    // margin-right: 10%;
     color: $brigthTextColor;
     background-color: $headerColor;
 }
 
 .table-part {
+    overflow: scroll;
     flex-grow: 2;
     flex-shrink: 2;
     @media (max-width: $smallWidth) {
-        // flex-basis: auto;
         width:100%;
         overflow-x: scroll;
     };
@@ -102,4 +102,17 @@ select, input {
     @media (min-width: $smallWidth) {
         flex-basis: 100px;
     };
+}
+
+.indicate-scrollable {
+    background-image: 
+        linear-gradient(to right, white, white), 
+        linear-gradient(to right, white, white), 
+        linear-gradient(to right, $shadowColor, transparent), 
+        linear-gradient(to left, $shadowColor, transparent);
+    background-position: left center, right center, left center, right center;
+    background-repeat: no-repeat;
+    background-color: white;
+    background-size: 20px 100%, 20px 100%, 15px 100%, 15px 100%;
+    background-attachment: local, local, scroll, scroll;
 }
